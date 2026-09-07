@@ -127,13 +127,14 @@ inline Lang langOfPath( std::string_view path ) noexcept
     }
 
     struct Row { std::string_view ext; Lang lang; };
-    static const std::array<Row, 32> kExt = { {
+    static const std::array<Row, 33> kExt = { {
         { ".cpp", Lang::Cpp }, { ".cc", Lang::Cpp }, { ".cxx", Lang::Cpp },
         { ".h", Lang::Cpp }, { ".hpp", Lang::Cpp }, { ".hh", Lang::Cpp }, { ".hxx", Lang::Cpp }, { ".c", Lang::C },
         { ".py", Lang::Python },
         { ".go", Lang::Go },
         { ".rs", Lang::Rust },
         { ".ts", Lang::TypeScript }, { ".tsx", Lang::TypeScript }, { ".mts", Lang::TypeScript }, { ".cts", Lang::TypeScript },
+        { ".astro", Lang::TypeScript },
         { ".swift", Lang::Swift },
         { ".m", Lang::ObjC }, { ".mm", Lang::ObjC },
         { ".js", Lang::JavaScript }, { ".jsx", Lang::JavaScript }, { ".mjs", Lang::JavaScript }, { ".cjs", Lang::JavaScript },

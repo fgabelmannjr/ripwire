@@ -57,7 +57,7 @@ struct LangEntry
 // `std::array<bool, kLangTable.size()> present` (the grammar-prewarm set,
 // below) exact too, and it turns "added a row and forgot the extent" into a compile error rather than a
 // silent drop.
-constexpr std::array<LangEntry, 42> kLangTable = {{
+constexpr std::array<LangEntry, 43> kLangTable = {{
     { ".cpp",  Lang::Cpp,        &tree_sitter_cpp,        "cpp"        },
     { ".cc",   Lang::Cpp,        &tree_sitter_cpp,        "cpp"        },
     { ".cxx",  Lang::Cpp,        &tree_sitter_cpp,        "cpp"        },
@@ -122,6 +122,15 @@ constexpr std::array<LangEntry, 42> kLangTable = {{
     { ".tsx",  Lang::TypeScript, &tree_sitter_tsx,        "typescript" },
     { ".mts",  Lang::TypeScript, &tree_sitter_typescript, "typescript" },
     { ".cts",  Lang::TypeScript, &tree_sitter_typescript, "typescript" },
+    // `.astro` = an Astro component: TypeScript frontmatter + HTML template + client <script> blocks. It
+    // rides the TypeScript grammar and query behind a pre-parse region blanker (ingest_astro.h) that
+    // keeps only the frontmatter and <script> bodies at their real offsets — MEASURED (2026-09-07, 8
+    // real files): raw parses degraded 8/8 with junk symbols, blanked parses clean 8/8 with every
+    // import kept. The component symbol and the PascalCase template-tag call references the query
+    // cannot see are emitted by astroEmitFacts. Lang::TypeScript (not a Lang::Astro) on purpose: the
+    // frontmatter IS TypeScript, its imports must resolve against .ts/.tsx islands through the same
+    // langCompatible group, and a separate Lang would drop out of every TS behaviour for no benefit.
+    { ".astro", Lang::TypeScript, &tree_sitter_typescript, "typescript" },
     { ".swift", Lang::Swift,     &tree_sitter_swift,      "swift"      },
     { ".m",    Lang::ObjC,       &tree_sitter_objc,       "objc"       },   // Objective-C
     { ".mm",   Lang::ObjC,       &tree_sitter_objc,       "objc"       },   // Objective-C++ (ObjC layer + C-style; C++ partial)

@@ -73,8 +73,8 @@ assert kinds('Layout') == ['cls'], ('Layout', kinds('Layout'))
 assert kinds('Header') == ['cls'], ('Header', kinds('Header'))
 assert kinds('index') == ['cls', 'cls'], ('two index pages expected (i18n)', kinds('index'))
 assert kinds('404') == ['cls'], ('404 page', kinds('404'))
-ids = {s.get('id') for s in byname['index'] if s.get('id')}
-assert len(ids) == 2, ('the two index pages must carry DISTINCT canonical ids', ids)
+owners = {f.get('p') for f in root.iter('f') for s in f.iter('s') if s.get('n') == 'index'}
+assert owners == {'pages/index.astro', 'pages/es/index.astro'}, ('the two index pages must be two rows under their own files', owners)
 # a dynamic-route stem is not an identifier: no page symbol, frontmatter still indexes
 assert '[...slug]' not in byname, 'bracket stem minted a symbol'
 assert 'getStaticPaths' in byname and kinds('getStaticPaths') == ['fn'], kinds('getStaticPaths')
@@ -181,7 +181,9 @@ xmllint --noout "$TMP/a.xml"
 echo '  PASS cold/warm determinism (x3), well-formed, minified'
 
 # ── 8) doc/binary agreement: no new grammar, and the language lists name Astro ───────────────────────
-"$BIN" --help 2>&1 | grep -q 'Astro' || { echo "  FAIL --help does not mention Astro"; exit 1; }
+# capture first: under pipefail a `grep -q` that exits on its first match SIGPIPEs the writer and fails the pipeline
+"$BIN" --help > "$TMP/help.txt" 2>&1 || true
+grep -q 'Astro' "$TMP/help.txt" || { echo "  FAIL --help does not mention Astro"; exit 1; }
 grep -q 'Astro' "$ROOT/README.md" || { echo "  FAIL README does not mention Astro"; exit 1; }
 PATH="$(cd "$(dirname "$BIN")" && pwd):$PATH" "$BIN" "$TMP/fix" --doctor > "$TMP/doctor.xml"
 python3 - "$TMP/doctor.xml" <<'PY'

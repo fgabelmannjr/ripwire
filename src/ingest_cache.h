@@ -192,7 +192,15 @@ constexpr std::uint32_t kCacheVersion = 16;           // 16: RawBind gains impor
                                                       //    (Py `pkg.mod`, TS `./x`, Rust `crate::a::b`/`mod:x`) —
                                                       //    a target FORMAT change → old caches must be rejected.
                                                       // 4: Include gained a `bool isAngle` (quote/angle) field
-constexpr std::uint32_t kParserVer    = 81;           // bump on any grammar/.scm/extraction change
+constexpr std::uint32_t kParserVer    = 82;           // bump on any grammar/.scm/extraction change
+                                                      // 82 = 2026-09-07 (+Astro, test/astrocheck.sh): `.astro`
+                                                      //    joins kLangTable on the TypeScript grammar behind the
+                                                      //    ingest_astro.h region blanker, and gains a component
+                                                      //    symbol plus template-tag call references per file. A
+                                                      //    v81 blob on an Astro-bearing tree has NO rows for those
+                                                      //    files at all (they were unsupported-ext) → reject. The
+                                                      //    record shape did not change, so only parserVer moves —
+                                                      //    the CUDA (37) precedent exactly.
                                                       // 81 = 2026-09-07 (four-language imports:
                                                       //    test/bashsourcecheck.sh, test/luarequirecheck.sh,
                                                       //    test/rubyrequirecheck.sh, test/eliximportcheck.sh,

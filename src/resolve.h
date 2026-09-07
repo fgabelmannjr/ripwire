@@ -170,6 +170,7 @@ inline IncludeLang includeLangOf( std::string_view path ) noexcept
         { ".py",  IncludeLang::Python },
         { ".ts",  IncludeLang::Ts },      { ".tsx", IncludeLang::Ts },      { ".mts", IncludeLang::Ts },
         { ".cts", IncludeLang::Ts },      { ".js",  IncludeLang::Ts },      { ".jsx", IncludeLang::Ts },
+        { ".astro", IncludeLang::Ts },    // Astro component: its frontmatter imports are TS imports (kLangTable)
         { ".mjs", IncludeLang::Ts },      { ".cjs", IncludeLang::Ts },
         { ".rs",  IncludeLang::Rust },
         { ".go",  IncludeLang::Go },       // Go: single-root DEFERRED (kNoFile); cross-root via go.mod `replace` (§3.2)
@@ -421,7 +422,7 @@ inline std::uint32_t resolveTsImport( std::string_view includerPath, std::string
         return kNoFile;
     }
 
-    static constexpr std::string_view kFileExt[]  = { ".ts", ".tsx", ".d.ts", ".js", ".jsx", ".mjs", ".cjs" };
+    static constexpr std::string_view kFileExt[]  = { ".ts", ".tsx", ".d.ts", ".js", ".jsx", ".mjs", ".cjs", ".astro" };
     static constexpr std::string_view kIndexRel[] = { "/index.ts", "/index.tsx", "/index.js", "/index.jsx" };
 
     // bare specifier (not `.`/`./`/`../`) → external package → unresolved single-root (the angle-include analogue).

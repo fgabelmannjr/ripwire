@@ -321,7 +321,7 @@ inline std::string commaSymbols( const std::vector<std::string>& symbols )
 // sentence is full of dotted tokens (URLs, "e.g.", version numbers) that are not a source file.
 inline constexpr std::string_view kCodeExtensions[] = {
     ".cpp", ".cc", ".cxx", ".h", ".hpp", ".hh", ".c", ".py", ".ts", ".tsx", ".js", ".jsx", ".go", ".rs",
-    ".java", ".rb", ".swift", ".cs", ".m", ".mm", ".cu", ".cuh", ".metal",
+    ".java", ".rb", ".swift", ".cs", ".m", ".mm", ".cu", ".cuh", ".metal", ".astro",
 };
 
 inline bool looksLikeFileToken( std::string_view token ) noexcept

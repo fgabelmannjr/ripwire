@@ -435,6 +435,15 @@ inline void runParseWorker( ParsePoolShared& sh, unsigned t )
                 continue;
             }
 
+            if( le->ext == ".astro" )   // Astro: component + tag refs over the ORIGINAL bytes, then blank to the TS regions (ingest_astro.h)
+            {
+                const AstroScan   astro = astroScan( bytes );
+                const std::size_t firstAstroDef = out.defs.size();
+                astroEmitFacts( static_cast<std::uint32_t>( fileId ), fs::path( path ).stem().string(), astro, out.defs, out.refs );
+                buildLexForNewDefs( out.defs, firstAstroDef, bytes );   // lexical stats over the real text, before the blank
+                astroBlankOutsideTs( bytes, astro );
+            }
+
             if( le->lang == Lang::Markdown )
             {
                 // hostile/degenerate markdown guard — MEMORY-SAFETY load-bearing, the yaml pair's

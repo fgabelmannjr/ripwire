@@ -16,7 +16,7 @@ deterministic call graph — what to touch, what it breaks, which tests to run �
 around and reading whole files.
 
 **Languages:** Rust · C++ · Objective-C/C++ · C · Metal · CUDA · Python · Go · Swift · TypeScript ·
-JavaScript · Java · Ruby · PHP · Lua · Elixir · Bash · C# · JSON · TOML · YAML · Markdown — see
+Astro · JavaScript · Java · Ruby · PHP · Lua · Elixir · Bash · C# · JSON · TOML · YAML · Markdown — see
 [language support and limits](#languages).
 
 ### No API key. No embeddings. No index server. No daemon.
@@ -1822,7 +1822,12 @@ GPU and CPU halves), **CUDA** (`.cu`/`.cuh` — indexed with the vendored `tree-
 so `kernel<<<grid, block>>>( … )` launch sites are real call edges and `--callers` of a kernel names
 its host-side launchers; `__constant__` module tables index as symbols even uninitialized — the
 `cudaMemcpyToSymbol` idiom — and SCREAMING_SNAKE `__device__`/`__managed__` globals join them;
-dual-compile `.cuh` headers resolve from both halves), Python, TypeScript,
+dual-compile `.cuh` headers resolve from both halves), Python, TypeScript, **Astro** (`.astro` —
+indexed with the TypeScript grammar behind a region blanker, so the frontmatter and client
+`<script>` blocks are ordinary TypeScript at their real lines; each component is a symbol named by
+its file stem and every PascalCase template tag is a call edge through the frontmatter import, so
+`--callers` of a layout names the pages that render it. Template interpolations `{…}` are a stated
+floor: no edges in this round, and a dynamic-route page `[...slug].astro` mints no symbol),
 JavaScript, Java, Ruby, **PHP** (`.php`/`.phtml` — classes, interfaces, traits, enums, functions,
 methods and constants; `$o?->m()` null-safe and `A::m()` static calls are edges; `use` directives are
 imports. Dynamic dispatch — `$fn()`, `call_user_func`, `__call` — names its callee at run time and is

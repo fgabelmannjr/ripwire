@@ -39,6 +39,37 @@ registered band**, published as such; the parts that stood were kept, including 
 distinguish. `test/skilldescbudgetcheck.sh` now pins every description under the budget, with a
 binary-backed arm reading the binary's own skill discovery, so this cannot drift back silently.
 
+### Added — Astro (`.astro`) is indexed on the TypeScript grammar (parser version 82)
+
+- **`.astro` components, layouts and pages are in the map.** They were `unsupported-ext` — on a
+  production Astro 7 site that hid 51 of ~165 source files, every page and layout among them, so
+  `--callers` of a layout had nothing to name. `.astro` now rides `Lang::TypeScript` +
+  `tree_sitter_typescript` + the typescript `tags.scm` (one `kLangTable` row, the Metal/CUDA
+  reuse-a-grammar shape) behind a pre-parse **region blanker** (`src/ingest_astro.h`): everything
+  outside the `---` frontmatter and client `<script>` bodies is replaced by spaces, newlines kept, so
+  the parser sees only TypeScript at the file's own byte offsets and line numbers. *(Measured before
+  adopting, 2026-09-07, 8 real `.astro` files: fed raw to the TypeScript grammar all 8 parse degraded, a
+  junk `const` symbol is minted and 2 of 8 lose every import row; blanked, all 8 parse clean, no junk,
+  62 import rows vs 54. The same files as `.tsx` confirmed the typescript query carries no JSX capture,
+  so template tags can never become references through the query alone.)*
+- **Two facts the query cannot see are emitted per file.** The component itself — one `t="cls"`
+  symbol named by the file stem (`Layout.astro` → `Layout`, Astro's own import convention), whole-file
+  span — and one call reference per PascalCase template tag (`<Header />`, `<Nav client:load />`),
+  bound through the frontmatter import like any other TS call, so `--callers=Layout` names the pages
+  that render it and `--impact` of a `.ts` helper reaches the `.astro` chain through a `.tsx` island.
+  `Fragment` is skipped; a dotted tag takes its head. Only an identifier-like stem earns the symbol:
+  `index`, `404`, `about-us` do (a second `pages/es/index.astro` keeps its own path-scoped id); a
+  dynamic route `[...slug].astro` does not, though its frontmatter still indexes.
+- **Resolution follows.** `.astro` joins the TS include family (`includeLangOf`) and the TS import
+  resolver's extension list, so `import Layout from '../layouts/Layout.astro'` is a path-precise edge
+  and an extension-less `'./Nav'` still lands on `Nav.tsx`.
+- **Stated floors, pinned by `test/astrocheck.sh`:** template interpolations (`{title}`,
+  `{items.map( … )}`) produce no edges this round; `Astro.props`/`Astro.url` stay unresolved
+  externals; `<style>` bodies and JSON-LD `is:inline` scripts contribute nothing. Because the
+  parser sees the blanked buffer, parse health over-reports for `.astro` and the size/verbosity
+  lenses see a near-empty file — floors, not wrong graph facts. No new grammar: the doctor census
+  is unchanged at 22.
+
 ### Added — Bash, Lua, Ruby and Elixir get import/dependency edges (parser version 81)
 
 Four languages that emitted **no dependency record on any tree** now emit one per directive. Each spells a
