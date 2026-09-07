@@ -1,0 +1,12 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const jsonLd = { '@context': 'https://schema.org', '@type': 'WebSite', jsonLdKey: 'not-a-symbol' };
+---
+
+<Layout title="Home">
+  <Fragment>
+    <p>Welcome.</p>
+  </Fragment>
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+</Layout>

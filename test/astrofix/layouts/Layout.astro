@@ -1,0 +1,39 @@
+---
+import Header from '../components/Header.astro';
+import { formatTitle } from '../lib/util';
+
+export interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = 'A fixture page' } = Astro.props;
+const pageTitle = formatTitle(title);
+---
+
+<html lang="en">
+  <head>
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+  </head>
+  <body>
+    <Header title={pageTitle} />
+    <main id="main">
+      <slot />
+    </main>
+    <Fragment set:html={description} />
+  </body>
+</html>
+
+<style>
+  .hero {
+    color: rebeccapurple;
+  }
+</style>
+
+<script>
+  function focusMain(): void {
+    document.getElementById('main')?.focus();
+  }
+  focusMain();
+</script>

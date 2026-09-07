@@ -1,0 +1,13 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  return [{ params: { slug: 'hello' } }];
+}
+
+const { slug } = Astro.params;
+---
+
+<Layout title={slug}>
+  <article>{slug}</article>
+</Layout>

@@ -1,0 +1,14 @@
+---
+import Nav from './Nav';
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<header class="site-header">
+  <h1>{title}</h1>
+  <Nav client:load />
+</header>

@@ -219,6 +219,7 @@ if seen == len( FIXTURES ):
 # status; do not infer it from the `exit` literal you can see, because the one that fires may be another.
 FAILFAST = {
     "elixircheck.sh":          ( "set -e and Python assertions; pre-Elixir HEAD binary probed to exit 1", 1 ),
+    "astrocheck.sh":           ( "set -e and Python assertions; pre-Astro HEAD binary probed to exit 1",  1 ),
     "agentloopcodexcheck.sh":  ( "trailing Python assertions make the interpreter rc the gate rc",     1 ),
     "clonebandcheck.sh":        ( "every check is `echo FAIL; exit 2` at the site",                      2 ),
     "clonelexcheck.sh":         ( "single terminal if/else on the harness binary, `exit 2` on failure",  2 ),
