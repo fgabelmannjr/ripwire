@@ -16,9 +16,9 @@ current shape.
 > ripwire — the "ripgrep of AI context": parse a codebase, rank symbols by Personalized PageRank,
 > stream a deterministic minified XML map to stdout. Zero runtime deps. Languages: C++, C, ObjC/ObjC++,
 > Metal (MSL, .metal — C++ grammar), CUDA (.cu/.cuh — tree-sitter-cuda, <<<>>> launches are call edges),
-> Python, TypeScript, JavaScript, Java, Ruby, PHP (.php/.phtml), Lua, Elixir (.ex/.exs), Bash, Go, Rust, Swift, C#;
+> Python, TypeScript, Astro (.astro — TS frontmatter + <script>; PascalCase template tags are call edges),
+> JavaScript, Java, Ruby, PHP (.php/.phtml), Lua, Elixir (.ex/.exs), Bash, Go, Rust, Swift, C#;
 > JSON, TOML, YAML (config keys); Markdown (.md/.markdown — headings are section symbols with spans).
-> usage: ripwire <dir> [flags]            # default = the ranked map of <dir> on stdout
 
 ## How to read a section
 
