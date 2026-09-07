@@ -48,14 +48,16 @@ namespace
 //      edge itself is already captured by the query on the blanked buffer. `Fragment` is Astro's
 //      pseudo-element and never a symbol, so it is skipped; a dotted tag (`<Icon.Foo>`) takes its head.
 //
-// KNOWN LIMIT, measured on the production site and NOT closed here: Astro components are always
-// DEFAULT imports (`import Layout from '../layouts/Layout.astro'`), and ingest_jsimports.h keeps the
-// default-import path on the name ladder rather than the path-precise import table. With ONE
-// definition named `Layout` the ladder binds every tag; with a second same-named symbol anywhere in
-// the tree (the site has one) the ladder refuses — `--callers=Layout` count=0, graph_unresolved=32 —
-// which is the resolver's standing wrong-narrow-is-worse-than-no-narrow doctrine, not an Astro
-// defect. Closing it means default-import narrowing for ALL of TS/JS (a sibling-wide change), so it
-// is the next plan phase, not a special case here.
+// KNOWN OPEN FINDING, measured on the production site and NOT closed here (docs/plans/astro-support.md,
+// phase 1.5): when a Markdown section WITH A BODY carries the same name as a component — the site's
+// README has `## Layout` followed by prose — every template-tag reference to that component lands in
+// graph_unresolved (`--callers=Layout` count=0, graph_unresolved=32 on the site; 3 on the fixture with
+// a one-section NOTES.md added). Bisected 2026-09-07 on test/astrofix: a heading-ONLY section, a
+// backtick mention in prose, and the same collision against a TypeScript `class Layout` all resolve;
+// only a same-named section with a body against an Astro component symbol does not, in any file.
+// The resolver's gauge says the defs were "all language-filtered", so the component row is losing
+// its place in the name bucket to the section rather than tying with it. Root cause not isolated;
+// the disclosure here is the evidence with its provenance, per the honesty contract.
 //
 // PHASE-1 NON-GOALS, pinned by test/astrocheck.sh so a later widening is a measured claim: template
 // interpolations (`{title}`, `{items.map( … )}`) produce NO read/call edges; `Astro.props` / `Astro.url`

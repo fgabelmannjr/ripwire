@@ -63,6 +63,12 @@ binary-backed arm reading the binary's own skill discovery, so this cannot drift
 - **Resolution follows.** `.astro` joins the TS include family (`includeLangOf`) and the TS import
   resolver's extension list, so `import Layout from '../layouts/Layout.astro'` is a path-precise edge
   and an extension-less `'./Nav'` still lands on `Nav.tsx`.
+- **Open finding, disclosed not closed:** a Markdown section *with a body* named like a component
+  (`## Layout` plus prose, anywhere in the tree) leaves every tag reference to that component
+  unresolved — on the production site `--callers=Layout` reads count=0 with graph_unresolved=32.
+  Bisected on the fixture: a heading-only section, a backtick mention, or the same collision against
+  a TypeScript `class Layout` all resolve. Reproduction and status live in
+  `docs/plans/astro-support.md` (phase 1.5).
 - **Stated floors, pinned by `test/astrocheck.sh`:** template interpolations (`{title}`,
   `{items.map( … )}`) produce no edges this round; `Astro.props`/`Astro.url` stay unresolved
   externals; `<style>` bodies and JSON-LD `is:inline` scripts contribute nothing. Because the

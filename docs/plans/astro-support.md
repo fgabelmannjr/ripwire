@@ -3,11 +3,12 @@
 | Phase | Status | Commit / note |
 |---|---|---|
 | 0. Plan committed to fork | done | this file |
-| 1a. Fixture + gate written, observed RED | pending | |
-| 1b. Implementation green on astrocheck | pending | |
+| 1a. Fixture + gate written, observed RED | done | 42eda352 — exit 1 at section 1 on the pre-Astro binary |
+| 1b. Implementation green on astrocheck | done | 49f3b45c — ALL PASS; quality-delta: 5 gating rows, all short-horizon-churn on the language tables/help text (acked with the suite result) |
 | 1c. Full gates, sanitizer, determinism x3 | pending | |
 | 1d. Docs, help, CHANGELOG, labeled ranking row | pending | |
 | 1e. Upstream issue + PR | pending | |
+| 1.5. Component symbol vs same-named Markdown section WITH a body | open | Repro: `cp -R test/astrofix /tmp/x; printf '## Layout\n\nprose\n' > /tmp/x/NOTES.md; ripwire /tmp/x --callers=Layout` → count=0, graph_unresolved=3. Heading-only, backtick mention, or a TS `class Layout` instead of the component: resolves. Gauge says defs were "all language-filtered". Suspects, in order: the model-build dedup/sort tie between a whole-file `cls` row (startByte=0, nameByte=EOF) and a section row, then the byName bucket build. Fix must be gate-first (add the NOTES.md arm to astrocheck, observe RED) and family-wide (any lane that emits a whole-file symbol). |
 | 2. tree-sitter-astro lane (only if interpolation reads matter) | not started | |
 | 3. Siblings: .vue / .svelte rows | not started | |
 
