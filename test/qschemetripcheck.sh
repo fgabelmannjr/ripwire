@@ -56,6 +56,11 @@ PIN="$ROOT/test/qschemetrip.hash"
 #   already taken by the ES-import bump, so the next free number over the tip is 80 — the RE-BUMP rule in
 #   ingest_cache.h's kParserVer note, applied for the third time this day. Record shapes unchanged, so
 #   kCacheVersion stays 16; no Snapshot-side function changed, kQSnapCacheScheme stays 8.
+# 2026-09-07, ASTRO (test/astrocheck.sh): kParserVer 81 -> 82 and kIngestParserVerMirror -> 82. `.astro` joins
+#   kLangTable on the TypeScript grammar behind the ingest_astro.h region blanker and gains a component symbol
+#   plus template-tag call references per file — an extraction change, so the lean family moves. No grammar,
+#   no .scm and no Snapshot-side function changed: kCacheVersion stays 16, kQSnapCacheScheme unchanged, and
+#   the manifest hash was re-pinned with UPDATE_GOLDEN=1 because the kParserVer line is part of the manifest text.
 # 2026-09-07, ELIXIR (test/elixircheck.sh): kParserVer 77 -> 78 and kIngestParserVerMirror -> 78 for the
 #   new grammar (.ex/.exs), its definition/call capture filters and its metrics. The fork proposed 83,
 #   reasoning that 78 must be skipped as "77's rich value"; it must not be. parserVerFor() derives the rich
